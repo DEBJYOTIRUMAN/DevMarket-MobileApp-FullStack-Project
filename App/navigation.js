@@ -21,6 +21,8 @@ import Browse from "./screens/Browse";
 import BestsellerProducts from "./screens/BestsellerProducts";
 import Privacy from "./screens/Privacy";
 import Support from "./screens/Support";
+import RefreshToken from "./RefreshToken";
+import { StatusBar } from "expo-status-bar";
 
 export default function RootNavigation() {
   const { store, persistor } = configureStore();
@@ -31,39 +33,43 @@ export default function RootNavigation() {
   };
 
   return (
-    <ReduxProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={screenOptions}
-          >
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="ShopDetail" component={ShopDetail} />
-            <Stack.Screen name="Signup" component={Signup} />
-            <Stack.Screen name="Signin" component={Signin} />
-            <Stack.Screen name="ProductDetail" component={ProductDetail} />
-            <Stack.Screen name="Cart" component={Cart} />
-            <Stack.Screen name="Address" component={Address} />
-            <Stack.Screen name="Payment" component={Payment} />
-            <Stack.Screen name="OrdersComplete" component={OrdersComplete} />
-            <Stack.Screen name="Orders" component={Orders} />
-            <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
-            <Stack.Screen name="ContactUs" component={ContactUs} />
-            <Stack.Screen
-              name="BrowseAllProducts"
-              component={BrowseAllProducts}
-            />
-            <Stack.Screen name="Browse" component={Browse} />
-            <Stack.Screen
-              name="BestsellerProducts"
-              component={BestsellerProducts}
-            />
-            <Stack.Screen name="Privacy" component={Privacy} />
-            <Stack.Screen name="Support" component={Support} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PersistGate>
-    </ReduxProvider>
+    <>
+      <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <RefreshToken />
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={screenOptions}
+            >
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="ShopDetail" component={ShopDetail} />
+              <Stack.Screen name="Signup" component={Signup} />
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen name="ProductDetail" component={ProductDetail} />
+              <Stack.Screen name="Cart" component={Cart} />
+              <Stack.Screen name="Address" component={Address} />
+              <Stack.Screen name="Payment" component={Payment} />
+              <Stack.Screen name="OrdersComplete" component={OrdersComplete} />
+              <Stack.Screen name="Orders" component={Orders} />
+              <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
+              <Stack.Screen name="ContactUs" component={ContactUs} />
+              <Stack.Screen
+                name="BrowseAllProducts"
+                component={BrowseAllProducts}
+              />
+              <Stack.Screen name="Browse" component={Browse} />
+              <Stack.Screen
+                name="BestsellerProducts"
+                component={BestsellerProducts}
+              />
+              <Stack.Screen name="Privacy" component={Privacy} />
+              <Stack.Screen name="Support" component={Support} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </ReduxProvider>
+      <StatusBar style="auto" />
+    </>
   );
 }

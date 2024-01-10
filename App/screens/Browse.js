@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Feather from "react-native-vector-icons/Feather";
 import bgImage from "../assets/images/support.jpg";
+import BottomTabs from "../components/home/BottomTabs";
 const items = [
   {
     text: "Mobiles",
@@ -107,6 +108,8 @@ export default function Browse({ navigation }) {
             </View>
           ))}
         </ScrollView>
+        <Divider width={1} />
+        <BottomTabs navigation={navigation} activeTab="Bestseller" />
       </ImageBackground>
     </SafeAreaView>
   );

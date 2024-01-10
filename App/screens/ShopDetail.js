@@ -4,6 +4,7 @@ import { Divider } from "react-native-elements";
 import About from "../components/shopDetails/About";
 import MenuItems from "../components/shopDetails/MenuItems";
 import bgImage from "../assets/images/shopdetails.jpg";
+import BottomTabs from "../components/home/BottomTabs";
 export default function ShopDetail({ route, navigation }) {
     const [menus, setMenus] = useState([]);
     useEffect(() => {
@@ -28,6 +29,8 @@ export default function ShopDetail({ route, navigation }) {
                 <Divider width={1.8} style={{ marginVertical: 20 }} />
                 <MenuItems menus={menus} navigation={navigation} />
             </View>
+            <Divider width={1} />
+            <BottomTabs navigation={navigation} activeTab="Home" />
         </ImageBackground>
     );
 }

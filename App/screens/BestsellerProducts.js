@@ -4,6 +4,7 @@ import { Divider } from "react-native-elements";
 import MenuItems from "../components/shopDetails/MenuItems";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import bgImage from "../assets/images/bestseller.jpg";
+import BottomTabs from "../components/home/BottomTabs";
 export default function BestsellerProducts({ route, navigation }) {
     let title = route.params.text;
     let image = route.params.image;
@@ -58,6 +59,8 @@ export default function BestsellerProducts({ route, navigation }) {
             </View>
             <Divider width={1.8} style={{ marginVertical: 20 }} />
             <MenuItems menus={menus} navigation={navigation} />
+            <Divider width={1} />
+            <BottomTabs navigation={navigation} activeTab="Bestseller" />
             </ImageBackground>
         </View>
     );

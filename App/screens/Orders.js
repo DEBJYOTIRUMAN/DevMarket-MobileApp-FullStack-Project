@@ -15,51 +15,26 @@ import { useSelector } from "react-redux";
 import OrdersProduct from "../components/orders/OrdersProduct";
 import bgImage from "../assets/images/orders.jpg";
 import gift from "../assets/images/gift.png";
+import BottomTabs from "../components/home/BottomTabs";
 export default function Orders({ navigation }) {
     const { token } = useSelector((state) => state.tokenReducer);
-    const [freshToken, setFreshToken] = useState({});
-    const [ready, setReady] = useState(false);
     const [myOrders, setMyOrders] = useState([]);
-    // Fresh Token Generate
-    useEffect(() => {
-        if (!token.refresh_token) {
-            return;
-        }
-        fetch("https://devmarket-nknv.onrender.com/api/refresh", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                refresh_token: token.refresh_token,
-            }),
-        })
-            .then((res) => res.json())
-            .then((tokenData) => {
-                setFreshToken(tokenData);
-                setReady(true);
-            });
-    }, []);
     // Get Orders
     useEffect(() => {
-        if (!ready) {
-            return;
-        }
-        if (!freshToken.access_token) {
+        if (!token.access_token) {
             return;
         }
         fetch("https://devmarket-nknv.onrender.com/api/order", {
             method: "GET",
             headers: {
-                Authorization: `Bearer ${freshToken.access_token}`,
+                Authorization: `Bearer ${token.access_token}`,
             },
         })
             .then((res) => res.json())
             .then((data) => {
                 setMyOrders(data);
-                setReady(false);
             });
-    }, [ready]);
+    }, [token]);
 
     return (
         <SafeAreaView
@@ -212,6 +187,8 @@ export default function Orders({ navigation }) {
                         showsVerticalScrollIndicator={false}
                     />
                 )}
+                <Divider width={1} />
+                <BottomTabs navigation={navigation} activeTab="Orders" />
             </ImageBackground>
         </SafeAreaView>
     );

@@ -24,6 +24,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Divider } from "react-native-elements";
 import LottieView from "lottie-react-native";
+import BottomTabs from "../components/home/BottomTabs";
 
 const validationSchema = Yup.object().shape({
   number: Yup.string()
@@ -44,54 +45,20 @@ export default function Payment({ navigation }) {
   const { total } = useSelector((state) => state.totalReducer);
   const { token } = useSelector((state) => state.tokenReducer);
   const { payment } = useSelector((state) => state.paymentReducer);
-  const [Submit, setSubmit] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [data, setData] = useState({});
-  const [ready, setReady] = useState(false);
   const [checked, setChecked] = useState("mastercard");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const controlSubmit = (values) => {
-    setSubmit(true);
     setData(values);
+    setSubmit(true);
   };
-  // Fresh Token Generate
-  useEffect(() => {
-    if (!Submit) {
-      return;
-    }
-
-    if (!token.refresh_token) {
-      return;
-    }
-    fetch("https://devmarket-nknv.onrender.com/api/refresh", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refresh_token: token.refresh_token,
-      }),
-    })
-      .then((res) => res.json())
-      .then((tokenData) => {
-        dispatch({
-          type: "ADD_TOKEN",
-          payload: {
-            tokenData,
-          },
-        });
-        setSubmit(false);
-        setReady(true);
-      });
-  }, [Submit]);
-
   // Save Payment
   useEffect(() => {
-
-    if (!ready) {
+    if (!submit) {
       return;
     }
-
     if (!token.access_token) {
       return;
     }
@@ -124,13 +91,13 @@ export default function Payment({ navigation }) {
             userPayment,
           },
         });
-        setReady(false);
+        setSubmit(false);
       });
     setTimeout(() => {
       setLoading(false);
       navigation.navigate("OrdersComplete");
     }, 2000);
-  }, [ready]);
+  }, [submit]);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#f6f7f7", flex: 1 }}>
@@ -438,6 +405,8 @@ export default function Payment({ navigation }) {
         ) : (
           <></>
         )}
+        <Divider width={1} />
+        <BottomTabs navigation={navigation} activeTab="Account" />
       </ImageBackground>
     </SafeAreaView>
   );

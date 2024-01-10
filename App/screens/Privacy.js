@@ -10,6 +10,7 @@ import { Divider } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import bgImage from "../assets/images/privacy.jpg";
+import BottomTabs from "../components/home/BottomTabs";
 
 export default function Privacy({ navigation }) {
   return (
@@ -28,10 +29,7 @@ export default function Privacy({ navigation }) {
               alignItems: "center",
             }}
           >
-            <MaterialCommunityIcons
-              name="keyboard-backspace"
-              size={32}
-            />
+            <MaterialCommunityIcons name="keyboard-backspace" size={32} />
           </TouchableOpacity>
           <Text
             style={{
@@ -152,6 +150,8 @@ export default function Privacy({ navigation }) {
             </Text>
           </View>
         </ScrollView>
+        <Divider width={1} />
+        <BottomTabs navigation={navigation} activeTab="Account" />
       </ImageBackground>
     </SafeAreaView>
   );

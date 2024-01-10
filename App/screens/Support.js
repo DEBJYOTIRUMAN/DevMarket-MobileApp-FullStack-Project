@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import bgImage from "../assets/images/support.jpg";
+import BottomTabs from "../components/home/BottomTabs";
 
 export default function Support({ navigation }) {
   return (
@@ -29,7 +30,11 @@ export default function Support({ navigation }) {
               alignItems: "center",
             }}
           >
-            <MaterialCommunityIcons name="keyboard-backspace" size={32} color={"grey"}/>
+            <MaterialCommunityIcons
+              name="keyboard-backspace"
+              size={32}
+              color={"grey"}
+            />
           </TouchableOpacity>
           <Text
             style={{
@@ -175,7 +180,7 @@ export default function Support({ navigation }) {
               width: "40%",
               height: 60,
               margin: 20,
-              alignSelf: 'flex-end'
+              alignSelf: "flex-end",
             }}
             onPress={() => navigation.navigate("ContactUs")}
           >
@@ -190,6 +195,8 @@ export default function Support({ navigation }) {
             </Text>
           </TouchableOpacity>
         </ScrollView>
+        <Divider width={1} />
+        <BottomTabs navigation={navigation} activeTab="Account" />
       </ImageBackground>
     </SafeAreaView>
   );

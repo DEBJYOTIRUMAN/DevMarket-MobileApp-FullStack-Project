@@ -15,6 +15,14 @@ export default function Home({ navigation }) {
   const [activeTab, setActiveTab] = useState("Delivery");
   const [query, setQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setQuery("");
+      // Your other code
+    });
+  
+    return unsubscribe;
+  }, [navigation]);
   // Search Get Request
   useEffect(() => {
     if (query == "") {
@@ -61,7 +69,7 @@ export default function Home({ navigation }) {
         </ScrollView>
 
         <Divider width={1} />
-        <BottomTabs navigation={navigation} />
+        <BottomTabs navigation={navigation} activeTab="Home" />
 
       </ImageBackground>
     </SafeAreaView>

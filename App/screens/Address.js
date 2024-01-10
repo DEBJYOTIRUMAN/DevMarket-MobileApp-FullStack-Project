@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -20,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import bgImage from "../assets/images/address.jpg";
+import { Divider } from "react-native-elements";
+import BottomTabs from "../components/home/BottomTabs";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().label("Name").required("Please enter your name."),
@@ -49,49 +50,19 @@ export default function Address({ navigation, route }) {
   const { user } = useSelector((state) => state.userReducer);
   const [checked, setChecked] = useState("home");
   const { address } = useSelector((state) => state.addressReducer);
-  const [Submit, setSubmit] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [data, setData] = useState({});
-  const [ready, setReady] = useState(false);
   const { token } = useSelector((state) => state.tokenReducer);
   const dispatch = useDispatch();
+  
   const controlSubmit = (values) => {
-    setSubmit(true);
     setData(values);
+    setSubmit(true);
   };
-  // Fresh Token Generate
-  useEffect(() => {
-    if (!Submit) {
-      return;
-    }
-
-    if (!token.refresh_token) {
-      return;
-    }
-    fetch("https://devmarket-nknv.onrender.com/api/refresh", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refresh_token: token.refresh_token,
-      }),
-    })
-      .then((res) => res.json())
-      .then((tokenData) => {
-        dispatch({
-          type: "ADD_TOKEN",
-          payload: {
-            tokenData,
-          },
-        });
-        setSubmit(false);
-        setReady(true);
-      });
-  }, [Submit]);
 
   // Post Address
   useEffect(() => {
-    if (!ready) {
+    if (!submit) {
       return;
     }
     if (
@@ -102,7 +73,6 @@ export default function Address({ navigation, route }) {
       address.state == data.state &&
       address.pincode == data.pincode
     ) {
-      setReady(false);
       if (!route.params) {
         navigation.navigate("Payment");
       } else {
@@ -142,23 +112,19 @@ export default function Address({ navigation, route }) {
             userAddress,
           },
         });
-        setReady(false);
+        setSubmit(false);
         if (!route.params) {
           navigation.navigate("Payment");
         } else {
           navigation.navigate("LoginSuccess");
         }
       });
-  }, [ready]);
+  }, [submit]);
 
   return Object.keys(user).length === 0 ? (
     <></>
   ) : (
-    <ImageBackground
-      source={bgImage}
-      style={{ flex: 1 }}
-      resizeMode="cover"
-    >
+    <ImageBackground source={bgImage} style={{ flex: 1 }} resizeMode="cover">
       <KeyboardAvoidingView
         style={styles.avoidKeyboard}
         behavior="padding"
@@ -173,7 +139,7 @@ export default function Address({ navigation, route }) {
                 width: "100%",
                 justifyContent: "space-between",
                 paddingHorizontal: 20,
-                marginTop: 20
+                marginTop: 20,
               }}
             >
               <TouchableOpacity
@@ -193,9 +159,8 @@ export default function Address({ navigation, route }) {
                 style={{
                   fontSize: 24,
                   textAlignVertical: "center",
-                  fontWeight: 'bold',
-                  color: "#4b4f3e"
-
+                  fontWeight: "bold",
+                  color: "#4b4f3e",
                 }}
               >
                 Delivery Address
@@ -222,23 +187,14 @@ export default function Address({ navigation, route }) {
             <View style={styles.form}>
               <Formik
                 initialValues={{
-                  name: `${address.name ? address.name : user.name
-                    }`,
-                  email: `${address.email
-                      ? address.email
-                      : user.email
-                    }`,
-                  phone: `${address.phone ? address.phone : ""
-                    }`,
-                  address: `${address.address ? address.address : ""
-                    }`,
-                  state: `${address.state ? address.state : ""
-                    }`,
-                  pincode: `${address.pincode ? address.pincode : ""
-                    }`,
+                  name: `${address.name ? address.name : user.name}`,
+                  email: `${address.email ? address.email : user.email}`,
+                  phone: `${address.phone ? address.phone : ""}`,
+                  address: `${address.address ? address.address : ""}`,
+                  state: `${address.state ? address.state : ""}`,
+                  pincode: `${address.pincode ? address.pincode : ""}`,
                 }}
                 onSubmit={(values) => {
-                  // Use API to handle validated data
                   controlSubmit(values);
                 }}
                 validationSchema={validationSchema}
@@ -262,11 +218,7 @@ export default function Address({ navigation, route }) {
                       placeholder="Enter your name"
                       returnKeyType="done"
                     />
-                    <ErrorMessage
-                      errorValue={
-                        touched.name && errors.name
-                      }
-                    />
+                    <ErrorMessage errorValue={touched.name && errors.name} />
 
                     <AddressInputField
                       name="email"
@@ -279,11 +231,7 @@ export default function Address({ navigation, route }) {
                       returnKeyType="done"
                       autoCapitalize="none"
                     />
-                    <ErrorMessage
-                      errorValue={
-                        touched.email && errors.email
-                      }
-                    />
+                    <ErrorMessage errorValue={touched.email && errors.email} />
 
                     <AddressInputField
                       name="phone"
@@ -296,29 +244,20 @@ export default function Address({ navigation, route }) {
                       returnKeyType="done"
                       autoCapitalize="none"
                     />
-                    <ErrorMessage
-                      errorValue={
-                        touched.phone && errors.phone
-                      }
-                    />
+                    <ErrorMessage errorValue={touched.phone && errors.phone} />
 
                     <AddressInputField
                       name="address"
                       label="Address"
                       value={values.address}
-                      onChangeText={handleChange(
-                        "address"
-                      )}
+                      onChangeText={handleChange("address")}
                       onBlur={handleBlur("address")}
                       placeholder="House No / Flat No / Floor"
                       returnKeyType="done"
                       autoCapitalize="none"
                     />
                     <ErrorMessage
-                      errorValue={
-                        touched.address &&
-                        errors.address
-                      }
+                      errorValue={touched.address && errors.address}
                     />
 
                     <AddressInputField
@@ -331,19 +270,13 @@ export default function Address({ navigation, route }) {
                       returnKeyType="done"
                       autoCapitalize="none"
                     />
-                    <ErrorMessage
-                      errorValue={
-                        touched.state && errors.state
-                      }
-                    />
+                    <ErrorMessage errorValue={touched.state && errors.state} />
 
                     <AddressInputField
                       name="pincode"
                       label="Pincode"
                       value={values.pincode}
-                      onChangeText={handleChange(
-                        "pincode"
-                      )}
+                      onChangeText={handleChange("pincode")}
                       onBlur={handleBlur("pincode")}
                       placeholder="Enter your Pincode"
                       returnKeyType="done"
@@ -351,10 +284,7 @@ export default function Address({ navigation, route }) {
                       keyboardType="numeric"
                     />
                     <ErrorMessage
-                      errorValue={
-                        touched.pincode &&
-                        errors.pincode
-                      }
+                      errorValue={touched.pincode && errors.pincode}
                     />
                     <View
                       style={{
@@ -371,7 +301,7 @@ export default function Address({ navigation, route }) {
                           textAlign: "center",
                           marginBottom: 5,
                           color: "#4b4f3e",
-                          fontWeight: 'bold'
+                          fontWeight: "bold",
                         }}
                       >
                         Select an Address Type
@@ -380,8 +310,7 @@ export default function Address({ navigation, route }) {
                       <View
                         style={{
                           flexDirection: "row",
-                          justifyContent:
-                            "space-evenly",
+                          justifyContent: "space-evenly",
                         }}
                       >
                         <View
@@ -392,24 +321,18 @@ export default function Address({ navigation, route }) {
                           <RadioButton
                             value="home"
                             status={
-                              checked === "home"
-                                ? "checked"
-                                : "unchecked"
+                              checked === "home" ? "checked" : "unchecked"
                             }
-                            onPress={() =>
-                              setChecked("home")
-                            }
+                            onPress={() => setChecked("home")}
                             color="#57664d"
                           />
                           <Text
-                            onPress={() =>
-                              setChecked("home")
-                            }
+                            onPress={() => setChecked("home")}
                             style={{
                               fontSize: 16,
                               alignSelf: "center",
                               color: "#4b4f3e",
-                              fontWeight: 'bold'
+                              fontWeight: "bold",
                             }}
                           >
                             Home
@@ -424,24 +347,18 @@ export default function Address({ navigation, route }) {
                           <RadioButton
                             value="work"
                             status={
-                              checked === "work"
-                                ? "checked"
-                                : "unchecked"
+                              checked === "work" ? "checked" : "unchecked"
                             }
-                            onPress={() =>
-                              setChecked("work")
-                            }
+                            onPress={() => setChecked("work")}
                             color="#57664d"
                           />
                           <Text
-                            onPress={() =>
-                              setChecked("work")
-                            }
+                            onPress={() => setChecked("work")}
                             style={{
                               fontSize: 16,
                               alignSelf: "center",
                               color: "#4b4f3e",
-                              fontWeight: 'bold'
+                              fontWeight: "bold",
                             }}
                           >
                             Work
@@ -456,24 +373,18 @@ export default function Address({ navigation, route }) {
                           <RadioButton
                             value="others"
                             status={
-                              checked === "others"
-                                ? "checked"
-                                : "unchecked"
+                              checked === "others" ? "checked" : "unchecked"
                             }
-                            onPress={() =>
-                              setChecked("others")
-                            }
+                            onPress={() => setChecked("others")}
                             color="#57664d"
                           />
                           <Text
-                            onPress={() =>
-                              setChecked("others")
-                            }
+                            onPress={() => setChecked("others")}
                             style={{
                               fontSize: 16,
                               alignSelf: "center",
                               color: "#4b4f3e",
-                              fontWeight: 'bold'
+                              fontWeight: "bold",
                             }}
                           >
                             Others
@@ -493,10 +404,11 @@ export default function Address({ navigation, route }) {
                 )}
               </Formik>
             </View>
-            <StatusBar style="auto" />
           </SafeAreaView>
         </ScrollView>
       </KeyboardAvoidingView>
+      <Divider width={1} />
+      <BottomTabs navigation={navigation} activeTab="Account" />
     </ImageBackground>
   );
 }

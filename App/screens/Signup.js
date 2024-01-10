@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -18,6 +17,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import bgImage from "../assets/images/signup.jpg";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import BottomTabs from "../components/home/BottomTabs";
+import { Divider } from "react-native-elements";
 
 const validationSchema = Yup.object().shape({
   fullname: Yup.string()
@@ -258,7 +259,6 @@ export default function Signup({ navigation, route }) {
                 )}
               </Formik>
             </View>
-            <StatusBar style="auto" />
             <View
               style={{
                 flexDirection: "row",
@@ -288,6 +288,8 @@ export default function Signup({ navigation, route }) {
           </SafeAreaView>
         </ScrollView>
       </KeyboardAvoidingView>
+      <Divider width={1} />
+      <BottomTabs navigation={navigation} activeTab="Account" />
     </ImageBackground>
   );
 }

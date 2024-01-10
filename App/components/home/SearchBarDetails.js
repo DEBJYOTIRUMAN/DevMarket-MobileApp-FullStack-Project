@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import bgImage from "../../assets/images/search.jpg";
+import { Divider } from "react-native-elements";
+import BottomTabs from "./BottomTabs";
 
 export default function SearchBarDetails({ query, searchData, navigation }) {
   return query === "" || searchData.length === 0 ? (
@@ -23,7 +25,7 @@ export default function SearchBarDetails({ query, searchData, navigation }) {
           paddingHorizontal: 8,
           width: "90%",
           alignSelf: "center",
-          height: 640,
+          height: "75%",
         }}
       >
         <FlatList
@@ -59,6 +61,8 @@ export default function SearchBarDetails({ query, searchData, navigation }) {
           showsVerticalScrollIndicator={false}
         />
       </View>
+      <Divider width={1} />
+      <BottomTabs navigation={navigation} activeTab="Home" />
     </ImageBackground>
   );
 }
