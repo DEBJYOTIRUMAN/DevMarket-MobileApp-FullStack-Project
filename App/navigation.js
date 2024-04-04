@@ -69,7 +69,7 @@ export default function RootNavigation() {
           </NavigationContainer>
         </PersistGate>
       </ReduxProvider>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </>
   );
 }
