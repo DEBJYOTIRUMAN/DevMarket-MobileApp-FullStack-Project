@@ -28,6 +28,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/api", routes);
 app.use("/uploads", express.static("uploads"));
+app.use("/", (req, res) => {
+  res.send(`
+  <h1>Welcome to Dev-Markat App Server🚀</h1>`);
+});
 
 app.use(errorHandler);
 app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
